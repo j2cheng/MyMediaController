@@ -28,7 +28,6 @@ jobs:
             libgstreamer1.0-dev
 
       - name: Build (${{ matrix.build_type }})
-        working-directory: MyMediaController
         run: |
           chmod +x build.sh
           ./build.sh -t ${{ matrix.build_type }}
@@ -38,6 +37,6 @@ jobs:
         with:
           name: newcsio-${{ matrix.build_type }}
           path: |
-            MyMediaController/build/newcsio_demo
-            MyMediaController/build/libnewcsio_core.a
+            build/newcsio_demo
+            build/libnewcsio_core.a
           if-no-files-found: ignore

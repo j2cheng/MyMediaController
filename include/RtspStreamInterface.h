@@ -34,14 +34,10 @@ typedef struct
 void NewCsio_Init(void);
 void NewCsio_DeInit(void);
 
-void NewCsio_Config(const NewCsioStreamConfig *config);
-
 /* Configure and start atomically (role taken from config->role). */
 void NewCsio_Start(const NewCsioStreamConfig *config);
 
-void NewCsio_StartServer(int streamId);
 void NewCsio_StopServer(int streamId);
-void NewCsio_StartClient(int streamId);
 void NewCsio_StopClient(int streamId);
 void NewCsio_SendKeepAlive(int streamId);
 void NewCsio_RestartClient(int streamId);

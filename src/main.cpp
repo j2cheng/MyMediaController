@@ -11,20 +11,17 @@ int main()
 {
     NewCsio_Init();
 
-    NewCsioStreamConfig client{};
-    client.streamId = 1;
-    client.role     = NEWCSIO_ROLE_CLIENT;
-    client.url      = "rtsp://127.0.0.1:8554/test";
-    NewCsio_Config(&client);
-
     NewCsioStreamConfig server{};
     server.streamId  = 0;
     server.role      = NEWCSIO_ROLE_SERVER;
     server.serverPort = 8554;
-    NewCsio_Config(&server);
+    NewCsio_Start(&server);
 
-    NewCsio_StartServer(0);
-    NewCsio_StartClient(1);
+    NewCsioStreamConfig client{};
+    client.streamId = 1;
+    client.role     = NEWCSIO_ROLE_CLIENT;
+    client.url      = "rtsp://127.0.0.1:8554/test";
+    NewCsio_Start(&client);
 
     for (int i = 0; i < 5; ++i)
     {

@@ -28,15 +28,11 @@ public:
     StreamController(const StreamController &)            = delete;
     StreamController &operator=(const StreamController &) = delete;
 
-    void configure(const StreamConfig &config);
-
     /* Configure and start in one atomic command (role comes from config).
      * Preferred entry point: immune to cross-thread config/start ordering. */
     void start(const StreamConfig &config);
 
-    void startServer(int streamId);
     void stopServer(int streamId);
-    void startClient(int streamId);
     void stopClient(int streamId);
     void sendKeepAlive(int streamId);
     void restartClient(int streamId);

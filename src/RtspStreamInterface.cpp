@@ -40,31 +40,15 @@ void NewCsio_DeInit(void)
     g_controller.reset();
 }
 
-void NewCsio_Config(const NewCsioStreamConfig *config)
-{
-    if (!g_controller || !config) return;
-    g_controller->configure(toStreamConfig(config));
-}
-
 void NewCsio_Start(const NewCsioStreamConfig *config)
 {
     if (!g_controller || !config) return;
     g_controller->start(toStreamConfig(config));
 }
 
-void NewCsio_StartServer(int streamId)
-{
-    if (g_controller) g_controller->startServer(streamId);
-}
-
 void NewCsio_StopServer(int streamId)
 {
     if (g_controller) g_controller->stopServer(streamId);
-}
-
-void NewCsio_StartClient(int streamId)
-{
-    if (g_controller) g_controller->startClient(streamId);
 }
 
 void NewCsio_StopClient(int streamId)

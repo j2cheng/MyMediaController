@@ -30,7 +30,7 @@ watchdog restarts stuck sessions.**
    enqueuing a restart back onto the controller actor — it never restarts a
    session directly (same discipline as the gRPC watchdog's `TryCancel`).
 4. **A control path for start/stop** — callers (or the C API) invoke
-   `StreamController::startClient/stopClient/...`, which enqueue commands to the
+   `StreamController::start/stopServer/stopClient/...`, which enqueue commands to the
    controller actor. The calling thread returns immediately.
 
 ## Threading invariant

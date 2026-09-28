@@ -160,34 +160,15 @@ StreamController::StreamController()
 
 StreamController::~StreamController() = default;
 
-void StreamController::configure(const StreamConfig &config)
-{
-    impl_->enqueue([impl = impl_.get(), config] { impl->handleConfigure(config); });
-}
-
 void StreamController::start(const StreamConfig &config)
 {
     impl_->enqueue(
         [impl = impl_.get(), config] { impl->handleStartConfigured(config); });
 }
 
-void StreamController::startServer(int streamId)
-{
-    impl_->enqueue([impl = impl_.get(), streamId] {
-        impl->handleStart(streamId, StreamRole::Server);
-    });
-}
-
 void StreamController::stopServer(int streamId)
 {
     impl_->enqueue([impl = impl_.get(), streamId] { impl->handleStop(streamId); });
-}
-
-void StreamController::startClient(int streamId)
-{
-    impl_->enqueue([impl = impl_.get(), streamId] {
-        impl->handleStart(streamId, StreamRole::Client);
-    });
 }
 
 void StreamController::stopClient(int streamId)

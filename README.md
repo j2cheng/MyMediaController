@@ -1,4 +1,4 @@
-# NewCsio — RTSP media with an actor / watchdog / queue architecture
+# MyMediaController — RTSP media with an actor / watchdog / queue architecture
 
 A modern C++17 rewrite of the `csio/cresRTSP` RTSP media client/server, using the
 same threading model discussed for `collab_stream_in_v4`
@@ -56,16 +56,39 @@ owning actor touches it.
 - `include/StreamController.hpp`, `src/StreamController.cpp` — dispatcher actor.
 - `include/RtspStreamInterface.h`, `src/RtspStreamInterface.cpp` — C facade.
 - `include/StreamConfig.hpp` — shared value types.
-- `src/main.cpp` — smoke driver.
+- `test/unit_test.cpp` — unit tests for the library.
 
 ## Build
 
-Requires GStreamer 1.0 dev packages (`gstreamer-1.0`) and a C++17 compiler.
+Requires GStreamer 1.0 dev packages (`gstreamer-1.0`), CMake >= 3.14, and a
+C++17 compiler. The library builds as a shared object, `libStreamController.so`.
+
+Using the helper script:
 
 ```sh
-cmake -S . -B build
+./build.sh                 # configure + build (Release)
+./build.sh -t Debug        # Debug build
+./build.sh -c              # clean first
+./build.sh -p              # also package a distribution zip
+```
+
+Or with CMake directly:
+
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
-./build/newcsio_demo
+ctest --test-dir build --output-on-failure
+```
+
+## Distribution package
+
+`./build.sh -p` (or `cpack --config build/CPackConfig.cmake -B build`) produces
+`build/StreamController-<version>-Linux.zip` containing the shared library and
+public headers:
+
+```
+lib/libStreamController.so
+include/   (RtspStreamInterface.h, StreamController.hpp, StreamConfig.hpp, ...)
 ```
 
 ## Notes / TODO for production

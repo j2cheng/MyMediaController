@@ -32,11 +32,14 @@ jobs:
           chmod +x build.sh
           ./build.sh -t ${{ matrix.build_type }}
 
+      - name: Test (${{ matrix.build_type }})
+        run: ctest --test-dir build --output-on-failure
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: newcsio-${{ matrix.build_type }}
+          name: streamcontroller-${{ matrix.build_type }}
           path: |
-            build/newcsio_demo
-            build/libnewcsio_core.a
+            build/libStreamController.so
+            build/unit_test
           if-no-files-found: ignore

@@ -8,6 +8,7 @@
 #   ./build.sh -c              # clean the build directory first
 #   ./build.sh -j 4            # limit parallel jobs to 4
 #   ./build.sh -b out          # use "out" as the build directory
+#   ./build.sh -p              # package a distribution zip (so + headers)
 #   ./build.sh -h              # show help
 
 set -euo pipefail
@@ -17,21 +18,23 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_TYPE="Release"
 BUILD_DIR="${SCRIPT_DIR}/build"
 CLEAN=0
+PACKAGE=0
 JOBS="$(nproc 2>/dev/null || echo 2)"
 
 # --- help -------------------------------------------------------------------
 usage() {
-    sed -n '2,13p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+    sed -n '2,14p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
     exit "${1:-0}"
 }
 
 # --- parse args -------------------------------------------------------------
-while getopts ":t:b:j:ch" opt; do
+while getopts ":t:b:j:cph" opt; do
     case "${opt}" in
         t) BUILD_TYPE="${OPTARG}" ;;
         b) BUILD_DIR="${OPTARG}" ;;
         j) JOBS="${OPTARG}" ;;
         c) CLEAN=1 ;;
+        p) PACKAGE=1 ;;
         h) usage 0 ;;
         :) echo "Error: -${OPTARG} requires an argument." >&2; usage 1 ;;
         \?) echo "Error: unknown option -${OPTARG}." >&2; usage 1 ;;
@@ -85,5 +88,10 @@ cmake -S "${SCRIPT_DIR}" -B "${BUILD_DIR}" \
 echo ">> Building with ${JOBS} job(s)"
 cmake --build "${BUILD_DIR}" --parallel "${JOBS}"
 
+if [ "${PACKAGE}" -eq 1 ]; then
+    echo ">> Packaging distribution zip"
+    cpack --config "${BUILD_DIR}/CPackConfig.cmake" -B "${BUILD_DIR}"
+fi
+
 echo ">> Done. Artifacts are in ${BUILD_DIR}"
-echo "   Run the demo with: ${BUILD_DIR}/newcsio_demo"
+echo "   Run the unit tests with: ctest --test-dir ${BUILD_DIR} --output-on-failure"
